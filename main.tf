@@ -171,10 +171,10 @@ resource "aws_ecs_task_definition" "strapi_task" {
       { name = "DATABASE_CONNECTION_TIMEOUT", value = "60000" }
     ]
     logConfiguration = {
-      logDriver = "awslogs"
+      logDriver = "awslogs",
       options = {
-        awslogs-group         = "/ecs/strapi-task"
-        awslogs-region        = "us-east-2"
+        awslogs-group         = "/ecs/strapi-task",
+        awslogs-region        = "us-east-2",
         awslogs-stream-prefix = "strapi"
       }
     }
@@ -201,5 +201,45 @@ resource "aws_ecs_service" "strapi_service" {
   }
 
   depends_on = [aws_lb_listener.listener]
+}
+
+resource "aws_cloudwatch_dashboard" "ecs_dashboard" {
+  dashboard_name = "strapi-dashboard"
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type = "metric",
+        x    = 0,
+        y    = 0,
+        width = 12,
+        height = 6,
+        properties = {
+          metrics = [
+            [ "ECS/ContainerInsights", "CPUUtilization", "ClusterName", "pradyumnacluster", "ServiceName", "prady-service" ]
+          ],
+          period = 60,
+          stat = "Average",
+          region = "us-east-2",
+          title = "CPU Utilization"
+        }
+      },
+      {
+        type = "metric",
+        x    = 12,
+        y    = 0,
+        width = 12,
+        height = 6,
+        properties = {
+          metrics = [
+            [ "ECS/ContainerInsights", "MemoryUtilization", "ClusterName", "pradyumnacluster", "ServiceName", "prady-service" ]
+          ],
+          period = 60,
+          stat = "Average",
+          region = "us-east-2",
+          title = "Memory Utilization"
+        }
+      }
+    ]
+  })
 }
 
