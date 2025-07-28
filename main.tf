@@ -88,12 +88,12 @@ resource "aws_security_group" "pradyumnasg" {
 }
 
 resource "aws_cloudwatch_log_group" "strapi_logs" {
-  name              = "/ecs/prady-strapi"
+  name              = "/ecs/prady-strapi-2"
   retention_in_days = 7
 }
 
 resource "aws_lb" "alb" {
-  name               = "pradylb"
+  name               = "pradylb-2"
   internal           = false
   load_balancer_type = "application"
   subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
@@ -101,7 +101,7 @@ resource "aws_lb" "alb" {
 }
 
 resource "aws_lb_target_group" "tg" {
-  name        = "pradytg"
+  name        = "pradytg-2"
   port        = 1337
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -182,7 +182,7 @@ resource "aws_ecs_task_definition" "strapi_task" {
 }
 
 resource "aws_ecs_service" "strapi_service" {
-  name            = "prady-service"
+  name            = "prady-service-2"
   cluster         = aws_ecs_cluster.strapi_cluster.id
   task_definition = aws_ecs_task_definition.strapi_task.arn
   launch_type     = "FARGATE"
