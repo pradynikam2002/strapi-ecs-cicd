@@ -88,7 +88,7 @@ resource "aws_security_group" "pradyumnasg" {
 }
 
 resource "aws_cloudwatch_log_group" "strapi_logs" {
-  name              = "/ecs/strapi-task"
+  name              = "/ecs/prady-strapi"
   retention_in_days = 7
 }
 
@@ -171,11 +171,11 @@ resource "aws_ecs_task_definition" "strapi_task" {
       { name = "DATABASE_CONNECTION_TIMEOUT", value = "60000" }
     ]
     logConfiguration = {
-      logDriver = "awslogs",
+      logDriver = "awslogs"
       options = {
-        awslogs-group         = "/ecs/strapi-task",
-        awslogs-region        = "us-east-2",
-        awslogs-stream-prefix = "strapi"
+        awslogs-group         = "/ecs/prady-strapi"
+        awslogs-region        = "us-east-2"
+        awslogs-stream-prefix = "prady"
       }
     }
   }])
@@ -204,7 +204,8 @@ resource "aws_ecs_service" "strapi_service" {
 }
 
 resource "aws_cloudwatch_dashboard" "ecs_dashboard" {
-  dashboard_name = "strapi-dashboard"
+  dashboard_name = "prady-dashboard"
+
   dashboard_body = jsonencode({
     widgets = [
       {
