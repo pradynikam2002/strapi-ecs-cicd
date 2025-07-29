@@ -1,0 +1,21 @@
+# Ignore Terraform build directories
+.terraform/
+*.tfstate
+*.tfstate.*
+*.backup
+*.log
+
+# Sensitive or state-related files
+terraform.tfstate
+terraform.tfstate.backup
+.crc
+
+# Ignore override files
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+
+# Local IDE files
+.vscode/
+.DS_Store
