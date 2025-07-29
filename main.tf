@@ -88,7 +88,7 @@ resource "aws_security_group" "pradyumnasg" {
 }
 
 resource "aws_cloudwatch_log_group" "strapi_logs" {
-  name              = "/ecs/prady-strapi-2"
+  name              = "/ecs/prady-strapi-v2"
   retention_in_days = 7
 }
 
@@ -101,7 +101,7 @@ resource "aws_lb" "alb" {
 }
 
 resource "aws_lb_target_group" "tg" {
-  name        = "pradytg-2"
+  name        = "pradytg-v2"
   port        = 1337
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
