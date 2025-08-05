@@ -1,42 +1,34 @@
 # Use official Node.js 18 image
 FROM node:18
 
-# ✅ Install netcat (required for startup.sh)
+# Install netcat (useful in startup script)
 RUN apt-get update && apt-get install -y netcat-openbsd && apt-get clean
-
 
 # Set working directory
 WORKDIR /app
 
-# Copy only package files first for better caching
+# Copy package.json and lock file
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install only production dependencies
+RUN npm install --production
 
-# Add PostgreSQL driver
-RUN npm install pg pg-connection-string
-
-# Copy the rest of the application
+# Copy the entire project
 COPY . .
 
-# ✅ Copy .env if needed
-COPY .env .env
+# Set production environment
+ENV NODE_ENV=production
 
-# ✅ Add startup script
+# Build the Strapi admin panel
+RUN npm run build
+
+# Copy and set permissions for startup script
 COPY startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
 
-# Build admin panel
-RUN npm run build
-
-# Expose Strapi port
+# Expose production port
 EXPOSE 1337
 
-# ✅ Run using startup script
+# Start Strapi
 CMD ["/app/startup.sh"]
-
-
-
-
 
