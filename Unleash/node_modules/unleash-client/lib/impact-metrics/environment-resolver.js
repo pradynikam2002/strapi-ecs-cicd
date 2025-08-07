@@ -1,0 +1,34 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extractEnvironmentFromCustomHeaders = void 0;
+const findAuthorizationHeaderKey = (customHeaders) => {
+    const headerKeys = Object.keys(customHeaders);
+    return headerKeys.find((key) => key.toLowerCase() === 'authorization');
+};
+const extractAuthorizationHeader = (customHeaders) => {
+    if (!customHeaders) {
+        return undefined;
+    }
+    const authHeaderKey = findAuthorizationHeaderKey(customHeaders);
+    if (!authHeaderKey) {
+        return undefined;
+    }
+    return customHeaders[authHeaderKey];
+};
+const extractEnvironmentFromHeader = (authorizationHeader) => {
+    if (!authorizationHeader) {
+        return undefined;
+    }
+    const parts = authorizationHeader.split(':');
+    if (parts.length >= 2 && parts[1]) {
+        const envParts = parts[1].split('.');
+        return envParts[0] || undefined;
+    }
+    return undefined;
+};
+const extractEnvironmentFromCustomHeaders = (customHeaders) => {
+    const authorizationHeader = extractAuthorizationHeader(customHeaders);
+    return extractEnvironmentFromHeader(authorizationHeader);
+};
+exports.extractEnvironmentFromCustomHeaders = extractEnvironmentFromCustomHeaders;
+//# sourceMappingURL=environment-resolver.js.map
