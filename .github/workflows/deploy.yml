@@ -42,8 +42,8 @@ jobs:
       - name: Create CodeDeploy Deployment
         run: |
           aws deploy create-deployment \
-            --application-name prady-codedeploy-app \
+            --application-name strapi-codedeploy-app \
             --deployment-group-name prady-dg \
             --deployment-config-name CodeDeployDefault.ECSAllAtOnce \
-            --github-location repository=pradynikam2002/Strapi-Pipeline-Masters,commitId=${{ github.sha }}
+            --github-location repository=pradynikam2002/strapi-ecs-cicd,commitId=${{ github.sha }}
 
